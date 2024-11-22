@@ -7,7 +7,7 @@ config :ret, RetWeb.Endpoint,
   allowed_origins: "*",
   # This config value is for local development only.
   secret_key_base: "txlMOtlaY5x3crvOCko4uV5PM29ul3zGo1oBGNO3cDXx+4GHLKqt0gR9qzgThxa5",
-  cors_proxy_url: [scheme: "https", host: "hubs-proxy.local", port: 4000],
+  cors_proxy_url: [scheme: "https", host: "143.198.201.239", port: 4000],
   server: false
 
 # Print only warnings and errors during test
@@ -37,7 +37,7 @@ config :ret, Ret.Guardian,
   secret_key: "47iqPEdWcfE7xRnyaxKDLt9OGEtkQG3SycHBEMOuT2qARmoESnhc76IgCUjaQIwX"
 
 config :ret, Ret.Storage,
-  host: "https://hubs.local:4000",
+  host: "https://143.198.201.239:4000",
   storage_path: "storage/test",
   ttl: 60 * 60 * 24
 

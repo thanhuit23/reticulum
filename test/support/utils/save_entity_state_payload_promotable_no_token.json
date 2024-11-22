@@ -5,7 +5,7 @@
     "networkId": "hvpg97x",
     "prefabName": "media",
     "initialData": {
-      "src": "https://hubs.local:4000/files/101ac987-61f4-4645-b512-def3f0336fdf.jpg?token=2bbfa5ff552a159cff50b8bc212a477c",
+      "src": "https://143.198.201.239:4000/files/101ac987-61f4-4645-b512-def3f0336fdf.jpg?token=2bbfa5ff552a159cff50b8bc212a477c",
       "recenter": true,
       "resize": true,
       "animateLoad": true,

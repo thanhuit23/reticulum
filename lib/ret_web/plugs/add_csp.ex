@@ -104,11 +104,17 @@ defmodule RetWeb.Plugs.AddCSP do
 
     # TODO: The https janus port CSP rules (including the default) can be removed after dialog is deployed,
     # since they are used to snoop and see what SFU it is.
+    # default_janus_csp_rule =
+    #   if default_janus_host != nil && String.length(String.trim(default_janus_host)) > 0,
+    #     do:
+    #       "wss://#{default_janus_host}:#{janus_port} https://#{default_janus_host}:#{janus_port}",
+    #     else: ""
     default_janus_csp_rule =
       if default_janus_host != nil && String.length(String.trim(default_janus_host)) > 0,
         do:
-          "wss://#{default_janus_host}:#{janus_port} https://#{default_janus_host}:#{janus_port}",
+          "wss://#{default_janus_host}:#{janus_port} https://#{default_janus_host}:#{janus_port} https://#{default_janus_host}:#{janus_port}/meta",
         else: ""
+
 
     ret_direct_connect =
       if is_subdomain do
@@ -190,6 +196,8 @@ defmodule RetWeb.Plugs.AddCSP do
         "https://www.google-analytics.com",
         "https://www.youtube.com",
         "https://fonts.gstatic.com",
+        "https://143.198.201.239",
+        "https://hubs-proxy.local",
         assets_url,
         cors_proxy_url,
         custom_rules[:connect_src],
@@ -220,6 +228,7 @@ defmodule RetWeb.Plugs.AddCSP do
         "blob:",
         "data:",
         "https://www.youtube.com",
+        "https://www.tekville.com",
         assets_url,
         cors_proxy_url,
         custom_rules[:media_src],
@@ -231,6 +240,7 @@ defmodule RetWeb.Plugs.AddCSP do
         "https://docs.google.com",
         "https://player.vimeo.com",
         "https://www.youtube.com",
+        "https://metacon.teacherville.co.kr/",
         custom_rules[:frame_src]
       ],
       "base-uri" => [
