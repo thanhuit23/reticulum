@@ -25,18 +25,19 @@ defmodule RetWeb.HubChannel do
   alias RetWeb.{Presence, EntityView}
   alias RetWeb.Api.V1.{HubView}
 
-  intercept [
+  intercept([
     "hub_refresh",
     "mute",
     "add_owner",
     "remove_owner",
     "message",
+    "animation_reaction",
     "block",
     "unblock",
     # See internal_naf_event_for/2
     "maybe-naf",
     "maybe-nafr"
-  ]
+  ])
 
   def join("hub:" <> hub_sid, %{"profile" => profile, "context" => context} = params, socket) do
     hub =
@@ -277,6 +278,24 @@ defmodule RetWeb.HubChannel do
 
   def handle_in("events:raise_hand", _payload, socket),
     do: socket |> set_presence_flag(:hand_raised, true)
+
+  def handle_in("animation_reaction" = event, %{"type" => type} = payload, socket) do
+    account = Guardian.Phoenix.Socket.current_resource(socket)
+    hub = socket |> hub_for_socket
+
+    if (type != "photo" and type != "video") or account |> can?(spawn_camera(hub)) do
+      broadcast!(
+        socket,
+        event,
+        payload
+        |> Map.delete("session_id")
+        |> Map.put(:session_id, socket.assigns.session_id)
+        |> payload_with_from(socket)
+      )
+    end
+
+    {:noreply, socket}
+  end
 
   def handle_in("events:lower_hand", _payload, socket),
     do: socket |> set_presence_flag(:hand_raised, false)
@@ -836,6 +855,18 @@ defmodule RetWeb.HubChannel do
   end
 
   def handle_out("message" = event, %{from_session_id: from_session_id} = payload, socket) do
+    blocked_session_ids = socket.assigns.blocked_session_ids
+    blocked_by_session_ids = socket.assigns.blocked_by_session_ids
+
+    if !Map.has_key?(blocked_session_ids, from_session_id) and
+         !Map.has_key?(blocked_by_session_ids, from_session_id) do
+      push(socket, event, payload |> payload_without_from)
+    end
+
+    {:noreply, socket}
+  end
+
+  def handle_out("animation_reaction" = event, %{from_session_id: from_session_id} = payload, socket) do
     blocked_session_ids = socket.assigns.blocked_session_ids
     blocked_by_session_ids = socket.assigns.blocked_by_session_ids
 
