@@ -5,7 +5,7 @@
     "networkId": "i97tf61",
     "prefabName": "media",
     "initialData": {
-      "src": "https://hubs.local:8080/assets/models/DuckyMesh-b80f0ece1f58a683839a..glb",
+      "src": "https://localhost:8080/assets/models/DuckyMesh-b80f0ece1f58a683839a..glb",
       "resize": true,
       "recenter": true,
       "animateLoad": true,

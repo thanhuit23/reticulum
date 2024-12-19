@@ -2,7 +2,7 @@
 pool = "default"
 
 [phx]
-port = 4000
+port = 443
 ip = "127.0.0.1"
 # This config value is for local development only.
 secret_key = "txlMOtlaY5x3crvOCko4uV5PM29ul3zGo1oBGNO3cDXx+7GHLKqt0gR9qzgThxb5"

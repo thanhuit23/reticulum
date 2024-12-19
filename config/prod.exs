@@ -15,7 +15,7 @@ import Config
 # which you typically run after static files are built.
 config :ret, RetWeb.Endpoint,
   https: [
-    port: 4000,
+    port: 443,
     otp_app: :ret
   ],
   http: [

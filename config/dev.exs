@@ -2,7 +2,7 @@ import Config
 
 # NOTE: this file contains some security keys/certs that are *not* secrets, and are only used for local development purposes.
 
-host = "hubs.local"
+host = "meta2.teacherville.co.kr"
 cors_proxy_host = "hubs-proxy.local"
 assets_host = "hubs-assets.local"
 link_host = "hubs-link.local"
@@ -17,18 +17,18 @@ link_host = "hubs-link.local"
 # watchers to your application. For example, we use it
 # with brunch.io to recompile .js and .css sources.
 config :ret, RetWeb.Endpoint,
-  url: [scheme: "https", host: host, port: 4000],
-  static_url: [scheme: "https", host: host, port: 4000],
+  url: [scheme: "https", host: host, port: 443],
+  static_url: [scheme: "https", host: host, port: 443],
   https: [
-    port: 4000,
+    port: 443,
     otp_app: :ret,
     cipher_suite: :strong,
-    keyfile: "#{File.cwd!()}/priv/dev-ssl.key",
-    certfile: "#{File.cwd!()}/priv/dev-ssl.cert"
+    keyfile: "#{File.cwd!()}/priv/cert/key.pem",
+    certfile: "#{File.cwd!()}/priv/cert/cert.pem"
   ],
-  cors_proxy_url: [scheme: "https", host: cors_proxy_host, port: 4000],
-  assets_url: [scheme: "https", host: assets_host, port: 4000],
-  link_url: [scheme: "https", host: link_host, port: 4000],
+  cors_proxy_url: [scheme: "https", host: cors_proxy_host, port: 443],
+  assets_url: [scheme: "https", host: assets_host, port: 443],
+  link_url: [scheme: "https", host: link_host, port: 443],
   imgproxy_url: [scheme: "http", host: host, port: 5000],
   debug_errors: true,
   code_reloader: true,
@@ -137,19 +137,20 @@ config :ret, Ret.Speelycaptor,
   speelycaptor_endpoint: "https://1dhaogh2hd.execute-api.us-west-1.amazonaws.com/public"
 
 config :ret, Ret.Storage,
-  host: "https://#{host}:4000",
+  host: "https://#{host}",
   storage_path: "storage/dev",
   ttl: 60 * 60 * 24
 
 asset_hosts =
   "https://localhost:4000 https://localhost:8080 " <>
-    "https://#{host}:4000 https://#{host}:8080 https://#{host}:3000 https://#{host}:8989 https://#{host}:9090 https://#{cors_proxy_host}:4000 " <>
-    "https://assets-prod.reticulum.io https://asset-bundles-dev.reticulum.io https://asset-bundles-prod.reticulum.io"
+    "https://#{host} https://#{host}:8080 https://#{host}:3000 https://#{host}:8989 https://#{host}:9090 https://#{cors_proxy_host} " <>
+    "https://assets-prod.reticulum.io https://asset-bundles-dev.reticulum.io https://asset-bundles-prod.reticulum.io " <>
+    "https://uploads-prod.reticulum.io "
 
 websocket_hosts =
   "https://localhost:4000 https://localhost:8080 wss://localhost:4000 " <>
-    "https://#{host}:4000 https://#{host}:8080 wss://#{host}:4000 wss://#{host}:8080 wss://#{host}:8989 wss://#{host}:9090 " <>
-    "wss://#{host}:4000 wss://#{host}:8080 https://#{host}:8080 https://hubs.local:8080 wss://hubs.local:8080"
+    "https://#{host} https://#{host}:8080 wss://#{host} wss://#{host}:8080 wss://#{host}:8989 wss://#{host}:9090 " <>
+    "wss://#{host} wss://#{host}:8080 https://#{host}:8080 https://localhost:8080 wss://localhost:8080"
 
 config :ret, RetWeb.Plugs.AddCSP,
   script_src: asset_hosts,
