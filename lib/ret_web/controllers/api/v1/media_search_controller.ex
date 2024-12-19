@@ -29,6 +29,7 @@ defmodule RetWeb.Api.V1.MediaSearchController do
         source: "rooms",
         cursor: params["cursor"] || "1",
         filter: params["filter"],
+        category: params["category"],
         q: params["q"]
       }
       |> Ret.MediaSearch.search()

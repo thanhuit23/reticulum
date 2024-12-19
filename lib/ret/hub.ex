@@ -88,7 +88,9 @@ defmodule Ret.Hub do
 
   schema "hubs" do
     field :name, :string
+    field :category, :string
     field :description, :string
+    field :room_data, :string
     field :hub_sid, :string
     field :host, :string
     field :last_active_at, :utc_datetime
@@ -135,7 +137,9 @@ defmodule Ret.Hub do
   ]
   @permitted_keys [
     :creator_assignment_token,
+    :category,
     :description,
+    :room_data,
     :embedded,
     :default_environment_gltf_bundle_url,
     :user_data,
@@ -416,10 +420,12 @@ defmodule Ret.Hub do
 
   def add_attrs_to_changeset(changeset, attrs) do
     changeset
-    |> cast(attrs, [:name, :description, :user_data, :room_size])
+    |> cast(attrs, [:name, :category, :description, :room_data, :user_data, :room_size])
     |> validate_required([:name])
     |> validate_length(:name, max: 64)
+    |> validate_length(:category, max: 255)
     |> validate_length(:description, max: 64_000)
+    |> validate_length(:room_data, max: 64_000)
     |> validate_number(:room_size,
       greater_than_or_equal_to: 0,
       less_than_or_equal_to: AppConfig.get_cached_config_value("features|max_room_size")

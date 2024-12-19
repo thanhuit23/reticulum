@@ -226,6 +226,16 @@ defmodule RetWeb.PageController do
   def render_for_path("/discord", _params, conn), do: conn |> render_page("discord.html")
   def render_for_path("/discord/", _params, conn), do: conn |> render_page("discord.html")
 
+  def render_for_path("/intrometa", _params, conn), do: conn |> render_page("intrometa.html")
+  def render_for_path("/intrometa/", _params, conn), do: conn |> render_page("intrometa.html")
+
+  def render_for_path("/category/" <> hub_category, _params, conn) do
+    category = hub_category |> String.split("/") |> List.first()
+
+    conn
+    |> render_page("category.html")
+  end
+
   def render_for_path("/cloud", _params, conn), do: conn |> render_page("cloud.html")
   def render_for_path("/cloud/", _params, conn), do: conn |> render_page("cloud.html")
 
@@ -290,6 +300,9 @@ defmodule RetWeb.PageController do
       conn |> send_resp(404, "Not found.")
     end
   end
+
+  def render_for_path("/app-icon.png", _params, conn), do: conn |> render_static_asset()
+  def render_for_path("/app-thumbnail.png", _params, conn), do: conn |> render_static_asset()
 
   def render_for_path("/" <> file, _params, conn) when file in @configurable_asset_files do
     {asset_key, {_file, path, mime_type}} =

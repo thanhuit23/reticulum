@@ -12,6 +12,8 @@ defmodule Ret.PageOriginWarmer do
              scene.html
              avatar.html
              discord.html
+             intrometa.html
+             category.html
              cloud.html
              signin.html
              verify.html

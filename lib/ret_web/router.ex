@@ -94,6 +94,17 @@ defmodule RetWeb.Router do
     get "/", HealthController, :index
   end
 
+  pipeline :static_web do
+    plug Plug.Static,
+      at: "/assets",
+      from: "/data/workspaces/assets"
+  end
+
+  scope "/assets", RetWeb do
+    pipe_through :static_web
+    get "/*path", ErrorController, :notfound
+  end
+
   scope "/api/postgrest" do
     pipe_through [:secure_headers, :auth_required, :admin_required, :proxy_api]
 
@@ -254,4 +265,5 @@ defmodule RetWeb.Router do
 
     get "/*path", PageController, only: [:index]
   end
+
 end

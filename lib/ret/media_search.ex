@@ -1,6 +1,6 @@
 defmodule Ret.MediaSearchQuery do
   @enforce_keys [:source]
-  defstruct [:source, :type, :user, :collection, :filter, :q, :similar_to, :cursor, :locale]
+  defstruct [:source, :type, :user, :collection, :filter, :q, :similar_to, :cursor, :locale, :category]
 end
 
 defmodule Ret.MediaSearchResult do
@@ -34,7 +34,7 @@ defmodule Ret.MediaSearch do
     SceneListing
   }
 
-  @page_size 24
+  @page_size 100
   # HACK for now to reduce page size for scene listings -- real fix will be to expose page_size to API
   @scene_page_size 23
   @max_face_count 60000
@@ -123,6 +123,10 @@ defmodule Ret.MediaSearch do
 
   def search(%Ret.MediaSearchQuery{source: "rooms", filter: "public", cursor: cursor, q: q}) do
     public_rooms_search(cursor, q)
+  end
+
+  def search(%Ret.MediaSearchQuery{source: "rooms", category: category, cursor: cursor, q: q}) do
+    category_rooms_search(category, cursor, q)
   end
 
   def search(%Ret.MediaSearchQuery{
@@ -557,6 +561,29 @@ defmodule Ret.MediaSearch do
     {:commit, results}
   end
 
+  defp category_rooms_search(category, cursor, _query) do
+    page_number = (cursor || "1") |> Integer.parse() |> elem(0)
+
+    ecto_query =
+      from h in Hub,
+        where: h.category == ^category,
+        where: h.entry_mode == ^:allow,
+        preload: [
+          scene: [:screenshot_owned_file,
+            project: []
+          ],
+          scene_listing: [:scene, :screenshot_owned_file]
+        ],
+        order_by: [desc: :inserted_at]
+
+    results =
+      ecto_query
+      |> Repo.paginate(%{page: page_number, page_size: @page_size})
+      |> result_for_page(page_number, :category_rooms, &hub_category_to_entry/1)
+
+    {:commit, results}
+  end
+
   defp created_rooms_search(cursor, account_id, _query) do
     page_number = (cursor || "1") |> Integer.parse() |> elem(0)
     ecto_query =
@@ -849,6 +876,48 @@ defmodule Ret.MediaSearch do
       description: hub.description,
       scene_id: scene_id,
       user_data: hub.user_data,
+      images: images
+    }
+  end
+
+defp hub_category_to_entry(%Hub{} = hub) when hub != nil do
+    scene_or_scene_listing = hub.scene || hub.scene_listing
+
+    images =
+      if scene_or_scene_listing do
+        %{
+          preview: %{
+            url:
+              scene_or_scene_listing.screenshot_owned_file
+              |> OwnedFile.uri_for()
+              |> URI.to_string()
+          }
+        }
+      else
+        %{preview: %{url: "#{RetWeb.Endpoint.url()}/app-thumbnail.png"}}
+      end
+
+    scene_id =
+      if scene_or_scene_listing do
+        Scene.to_sid(scene_or_scene_listing)
+      else
+        nil
+      end
+
+    %{
+      id: hub.hub_sid,
+      url: hub |> Hub.url_for(),
+      type: :room,
+      room_size: hub |> Hub.room_size_for(),
+      member_count: hub |> Hub.member_count_for(),
+      lobby_count: hub |> Hub.lobby_count_for(),
+      name: hub.name,
+      category: hub.category,
+      description: hub.description,
+      room_data: hub.room_data,
+      scene_id: scene_id,
+      user_data: hub.user_data,
+      project_id: hub.scene.project |> Project.to_sid(),
       images: images
     }
   end
