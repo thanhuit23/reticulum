@@ -148,6 +148,7 @@ defmodule RetWeb.Plugs.AddCSP do
         "https://ssl.google-analytics.com",
         "https://www.google-analytics.com",
         "https://www.youtube.com",
+        "https://metacon.teacherville.co.kr",
         assets_url,
         custom_rules[:script_src],
         storage_url
@@ -155,11 +156,13 @@ defmodule RetWeb.Plugs.AddCSP do
       "child-src" => [
         "'self'",
         "blob:",
+        "https://metacon.teacherville.co.kr",
         custom_rules[:child_src]
       ],
       "worker-src" => [
         "'self'",
         "blob:",
+        "https://metacon.teacherville.co.kr",
         assets_url,
         custom_rules[:worker_src],
         storage_url
@@ -169,7 +172,9 @@ defmodule RetWeb.Plugs.AddCSP do
         "https://cdn.aframe.io",
         "https://cdn.jsdelivr.net",
         "https://fonts.googleapis.com",
+        "https://raw.githubusercontent.com",
         "https://fonts.gstatic.com",
+        "https://cdn.jsdelivr.net",
         assets_url,
         cors_proxy_url,
         custom_rules[:font_src],
@@ -196,6 +201,8 @@ defmodule RetWeb.Plugs.AddCSP do
         "https://www.google-analytics.com",
         "https://www.youtube.com",
         "https://fonts.gstatic.com",
+        "https://fonts.googleapis.com",
+        "https://cdn.jsdelivr.net",
         assets_url,
         cors_proxy_url,
         custom_rules[:connect_src],
@@ -203,7 +210,12 @@ defmodule RetWeb.Plugs.AddCSP do
         ret_direct_connect,
         storage_url,
         thumbnail_url,
-        "https://raw.githubusercontent.com"
+        "https://raw.githubusercontent.com",
+        "https://metatrack-xapi.tubeai.co.kr",
+        "https://api.meta-track.kr",
+        "https://meta2.teacherville.co.kr",
+        "https://metacon.teacherville.co.kr",
+        "https://api.openai.com",
       ],
       "img-src" => [
         "'self'",
@@ -237,6 +249,7 @@ defmodule RetWeb.Plugs.AddCSP do
         "https://docs.google.com",
         "https://player.vimeo.com",
         "https://www.youtube.com",
+        "https://metacon.teacherville.co.kr",
         custom_rules[:frame_src]
       ],
       "base-uri" => [
