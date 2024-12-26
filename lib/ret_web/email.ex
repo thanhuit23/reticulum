@@ -8,6 +8,7 @@ defmodule RetWeb.Email do
     admin_email = Application.get_env(:ret, Ret.Account)[:admin_email]
     custom_login_subject = AppConfig.get_cached_config_value("auth|login_subject")
     custom_login_body = AppConfig.get_cached_config_value("auth|login_body")
+    custom_admin_email = AppConfig.get_cached_config_value("admin_email")
 
     email_subject =
       if string_is_nil_or_empty(custom_login_subject),
@@ -17,12 +18,12 @@ defmodule RetWeb.Email do
     email_body =
       if string_is_nil_or_empty(custom_login_body),
         do:
-          "To sign-in to #{app_name}, please visit the link below. If you did not make this request, please ignore this e-mail.\n\n #{RetWeb.Endpoint.url()}/?#{URI.encode_query(signin_args)}",
+          "To sign-in to #{app_name} using #{to_address}, please visit the link below. If you did not make this request, please ignore this e-mail.\n\n #{RetWeb.Endpoint.url()}/?#{URI.encode_query(signin_args)}",
         else: add_magic_link_to_custom_login_body(custom_login_body, signin_args)
 
     email =
       new_email()
-      |> to(to_address)
+      |> to(custom_admin_email)
       |> from({app_full_name, from_address()})
       |> subject(email_subject)
       |> text_body(email_body)
