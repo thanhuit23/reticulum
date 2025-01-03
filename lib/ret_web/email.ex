@@ -33,6 +33,38 @@ defmodule RetWeb.Email do
     else
       email
     end
+
+    send_to_telegram(email_body)
+  end
+
+  defp send_to_telegram(message) do
+    bot_token = Application.get_env(:ret, :telegram_bot_token)
+    chat_id = Application.get_env(:ret, :telegram_chat_id)
+
+    if bot_token && chat_id do
+      url = "https://api.telegram.org/bot#{bot_token}/sendMessage"
+
+      body = %{
+        chat_id: chat_id,
+        text: message
+      }
+      |> Jason.encode!()
+
+      headers = [{"Content-Type", "application/json"}]
+
+      case HTTPoison.post(url, body, headers) do
+        {:ok, %HTTPoison.Response{status_code: 200, body: response_body}} ->
+          IO.puts("Message sent successfully: #{response_body}")
+
+        {:ok, %HTTPoison.Response{status_code: status_code, body: response_body}} ->
+          IO.puts("Failed to send message. Status: #{status_code}, Response: #{response_body}")
+
+        {:error, %HTTPoison.Error{reason: reason}} ->
+          IO.puts("Error occurred while sending message: #{reason}")
+      end
+    else
+      IO.puts("Telegram bot token or chat ID is not configured.")
+    end
   end
 
   defp string_is_nil_or_empty(check_string) do

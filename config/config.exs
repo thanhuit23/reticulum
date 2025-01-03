@@ -8,6 +8,9 @@ config :ret,
 config :phoenix, :format_encoders, "json-api": Jason
 config :phoenix, :json_library, Jason
 
+config :ret, :telegram_bot_token, "8092411491:AAGvg9fgEi2Vpm1NTrA1D4Mua0sQw24Vi0U"
+config :ret, :telegram_chat_id, "187812643"
+
 config :canary,
   repo: Ret.Repo,
   unauthorized_handler: {RetWeb.Canary.AuthorizationErrorHandler, :authorization_error}
