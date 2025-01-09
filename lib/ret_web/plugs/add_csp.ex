@@ -205,7 +205,8 @@ defmodule RetWeb.Plugs.AddCSP do
         ret_direct_connect,
         storage_url,
         thumbnail_url,
-        "https://raw.githubusercontent.com"
+        "https://raw.githubusercontent.com",
+        "https://metacon.teacherville.co.kr"
       ],
       "img-src" => [
         "'self'",
@@ -229,6 +230,7 @@ defmodule RetWeb.Plugs.AddCSP do
         "data:",
         "https://www.youtube.com",
         "https://www.tekville.com",
+        "https://metacon.teacherville.co.kr",
         assets_url,
         cors_proxy_url,
         custom_rules[:media_src],
