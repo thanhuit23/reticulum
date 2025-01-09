@@ -221,7 +221,8 @@ defmodule RetWeb.Plugs.AddCSP do
         cors_proxy_url,
         custom_rules[:img_src],
         storage_url,
-        thumbnail_url
+        thumbnail_url,
+        "https://metacon.teacherville.co.kr"
       ],
       "media-src" => [
         "'self'",
