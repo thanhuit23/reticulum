@@ -232,6 +232,7 @@ defmodule RetWeb.Plugs.AddCSP do
         "https://www.youtube.com",
         "https://www.tekville.com",
         "https://metacon.teacherville.co.kr",
+        "https://meta2.teacherville.co.kr/",
         assets_url,
         cors_proxy_url,
         custom_rules[:media_src],
