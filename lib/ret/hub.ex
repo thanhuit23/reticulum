@@ -41,7 +41,8 @@ defmodule Ret.Hub do
     (1 <<< 4) => :spawn_emoji,
     (1 <<< 5) => :fly,
     (1 <<< 6) => :voice_chat,
-    (1 <<< 7) => :text_chat
+    (1 <<< 7) => :text_chat,
+    (1 <<< 8) => :sync_button
   }
 
   @member_permissions_keys @member_permissions |> Map.values()
@@ -54,7 +55,8 @@ defmodule Ret.Hub do
     spawn_emoji: true,
     fly: true,
     voice_chat: true,
-    text_chat: true
+    text_chat: true,
+    sync_button: true
   }
 
   @default_restrictive_member_permissions %{
@@ -65,7 +67,8 @@ defmodule Ret.Hub do
     spawn_emoji: false,
     fly: false,
     voice_chat: true,
-    text_chat: true
+    text_chat: true,
+    sync_button: true
   }
 
   def hub_preloads() do
@@ -886,7 +889,8 @@ defmodule Ret.Hub do
       spawn_emoji: account |> can?(spawn_emoji(hub)),
       fly: account |> can?(fly(hub)),
       voice_chat: account |> can?(voice_chat(hub)),
-      text_chat: account |> can?(text_chat(hub))
+      text_chat: account |> can?(text_chat(hub)),
+      sync_button: account |> can?(sync_button(hub))
     }
   end
 
@@ -953,7 +957,8 @@ defimpl Canada.Can, for: Ret.Account do
     :spawn_emoji,
     :fly,
     :voice_chat,
-    :text_chat
+    :text_chat,
+    :sync_button
   ]
   @creator_actions [:update_roles]
 
@@ -1062,7 +1067,8 @@ defimpl Canada.Can, for: Ret.OAuthProvider do
     :spawn_emoji,
     :fly,
     :voice_chat,
-    :text_chat
+    :text_chat,
+    :sync_button
   ]
   @special_actions [
     :update_hub,
@@ -1147,7 +1153,8 @@ defimpl Canada.Can, for: Atom do
     :spawn_emoji,
     :fly,
     :voice_chat,
-    :text_chat
+    :text_chat,
+    :sync_button
   ]
   # Object permissions for anonymous users are based on member permission settings
   def can?(_account, action, hub) when action in @object_actions do

@@ -42,6 +42,8 @@ defmodule RetWeb.Schema.RoomTypes do
     field :voice_chat, :boolean
     @desc "Allows non-admin participants to use the text chat"
     field :text_chat, :boolean
+    @desc "Allows non-admin participants to use the image button as a sync button"
+    field :sync_button, :boolean
   end
 
   @desc "Permissions for participants in the room"
@@ -62,6 +64,8 @@ defmodule RetWeb.Schema.RoomTypes do
     field :voice_chat, :boolean
     @desc "Allows non-admin participants to use the text chat"
     field :text_chat, :boolean
+    @desc "Allows non-admin participants to use the image button as a sync button"
+    field :sync_button, :boolean
   end
 
   @desc "A room"
