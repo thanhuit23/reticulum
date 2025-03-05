@@ -216,6 +216,7 @@ defmodule RetWeb.Plugs.AddCSP do
         "https://meta2.teacherville.co.kr",
         "https://metacon.teacherville.co.kr",
         "https://api.openai.com",
+        "https://*.trycloudflare.com"
       ],
       "img-src" => [
         "'self'",
